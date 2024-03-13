@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+int main()
+{
+    FILE* p_file=fopen("plaintxt.txt","r");
+
+    if(p_file == NULL)
+    {
+        return 1;
+    }
+    FILE* c_file = fopen("ciphertxt.txt","w");
+    if(c_file == NULL)
+    {
+        return 1;
+    }
+    FILE* r_file = fopen("reciphertxt.txt","w");
+        if(r_file == NULL)
+    {
+        return 1;
+    }
+    char plaintext[1000],ciphertext[1000],reciphertext[1000];
+    int ch;
+
+    int num_of_ch = 0;
+
+
+
+    while((ch = fgetc(p_file)) != EOF)
+    {
+        plaintext[num_of_ch] = ch;
+        num_of_ch++;
+
+    }
+    plaintext[num_of_ch] = '\0';
+    printf("plaintext : %s\n\n\n",plaintext);
+    fclose(p_file);
+    int key = 0;
+    for(int i = 0; i<num_of_ch/2;i++)
+        key = log(plaintext[i]+plaintext[num_of_ch-1-i]);
+
+
+
+    int j = 0;
+    for(int i = 0 ; i<num_of_ch;i++)
+    {
+        ciphertext[i] = plaintext[i] + key;
+
+        fputc(ciphertext[i],c_file);
+    }
+
+
+
+    ciphertext[num_of_ch] = '\0';
+
+
+    printf("ciphertext : %s\n\n\n",ciphertext);
+    fclose(c_file);
+
+
+    for(int i = 0;i<num_of_ch;i++){
+        reciphertext[i]=ciphertext[i]-key;
+    }
+
+
+reciphertext[num_of_ch] = '\0';
+
+
+    for(int i =0;i<num_of_ch;i++)
+    {
+        fputc(reciphertext[i],r_file);
+
+    }
+    printf("reciphertext = %s\n\n\n",reciphertext);
+    fclose(r_file);
+}
